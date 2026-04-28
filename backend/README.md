@@ -26,7 +26,7 @@ The project is built using modern technologies with secure authentication and sc
 
 ---
 
-## ✨ Features
+##  Features
 
 * 🔐 User Authentication (Login & Register)
 * 🛍️ Product Management (Add / View Products)
@@ -57,7 +57,7 @@ Secure-Multi-Vendor-E-Commerce-Marketplace-Platform/
 
 ---
 
-## ⚙️ How to Run the Project
+##  How to Run the Project
 
 ###  Backend (Spring Boot)
 
