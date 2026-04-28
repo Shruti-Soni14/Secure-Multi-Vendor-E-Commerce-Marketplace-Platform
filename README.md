@@ -1,6 +1,6 @@
-# 🛒 Secure Multi-Vendor E-Commerce Marketplace Platform
+#  Secure Multi-Vendor E-Commerce Marketplace Platform
 
-## 📌 Project Overview
+##  Project Overview
 
 This is a full-stack **Multi-Vendor E-Commerce Marketplace** where multiple sellers can list products and users can browse, add to cart, and place orders.
 
@@ -8,25 +8,25 @@ The project is built using modern technologies with secure authentication and sc
 
 ---
 
-## 🚀 Tech Stack
+##  Tech Stack
 
-### 🔹 Frontend
+###  Frontend
 
 * React.js
 * HTML, CSS, JavaScript
 
-### 🔹 Backend
+###  Backend
 
 * Spring Boot
 * REST APIs
 
-### 🔹 Database
+###  Database
 
 * PostgreSQL
 
 ---
 
-## ✨ Features
+##  Features
 
 * 🔐 User Authentication (Login & Register)
 * 🛍️ Product Management (Add / View Products)
@@ -37,7 +37,7 @@ The project is built using modern technologies with secure authentication and sc
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 Secure-Multi-Vendor-E-Commerce-Marketplace-Platform/
@@ -57,9 +57,9 @@ Secure-Multi-Vendor-E-Commerce-Marketplace-Platform/
 
 ---
 
-## ⚙️ How to Run the Project
+##  How to Run the Project
 
-### 🔹 Backend (Spring Boot)
+###  Backend (Spring Boot)
 
 1. Open project in IntelliJ IDEA
 2. Run main class:
@@ -76,7 +76,7 @@ http://localhost:8080
 
 ---
 
-### 🔹 Frontend (React)
+###  Frontend (React)
 
 ```bash
 cd frontend
@@ -92,7 +92,7 @@ http://localhost:3000
 
 ---
 
-## 🔗 API Base URL
+##  API Base URL
 
 ```
 http://localhost:8080
