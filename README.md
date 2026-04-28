@@ -1,70 +1,128 @@
-# Getting Started with Create React App
+# 🛒 Secure Multi-Vendor E-Commerce Marketplace Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 📌 Project Overview
 
-## Available Scripts
+This is a full-stack **Multi-Vendor E-Commerce Marketplace** where multiple sellers can list products and users can browse, add to cart, and place orders.
 
-In the project directory, you can run:
+The project is built using modern technologies with secure authentication and scalable architecture.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🔹 Frontend
 
-### `npm test`
+* React.js
+* HTML, CSS, JavaScript
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🔹 Backend
 
-### `npm run build`
+* Spring Boot
+* REST APIs
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 🔹 Database
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* PostgreSQL
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## ✨ Features
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* 🔐 User Authentication (Login & Register)
+* 🛍️ Product Management (Add / View Products)
+* 🛒 Cart System
+* 📦 Order Management
+* 🏪 Multi-Vendor Support
+* 🔒 Secure Backend with Spring Security
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📂 Project Structure
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+Secure-Multi-Vendor-E-Commerce-Marketplace-Platform/
+│
+├── backend/
+│   ├── src/main/java/com/example/...
+│   ├── src/main/resources/
+│   ├── pom.xml
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   ├── package.json
+│
+└── README.md
+```
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## ⚙️ How to Run the Project
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 🔹 Backend (Spring Boot)
 
-### Code Splitting
+1. Open project in IntelliJ IDEA
+2. Run main class:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```
+SecureMultiVendorECommerceMarketplacePlatformApplication.java
+```
 
-### Analyzing the Bundle Size
+3. Server will start at:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+http://localhost:8080
+```
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### 🔹 Frontend (React)
 
-### Advanced Configuration
+```bash
+cd frontend
+npm install
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Open in browser:
 
-### Deployment
+```
+http://localhost:3000
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## 🔗 API Base URL
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+http://localhost:8080
+```
+
+---
+
+##  Demo
+
+* Frontend: http://localhost:3000
+* Backend: http://localhost:8080
+
+---
+
+##  Author
+
+**Shruti Soni**
+
+---
+
+##  Future Improvements
+
+* Payment Integration
+* Admin Dashboard
+* Product Reviews & Ratings
+* Deployment (AWS / Netlify / Render)
+
+---
+
+##  Note
+
+This project is built for learning and demonstration purposes.
+
