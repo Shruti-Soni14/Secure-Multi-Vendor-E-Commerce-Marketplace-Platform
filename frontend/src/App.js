@@ -14,7 +14,7 @@ function App() {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  //  LOGIN FIXED
+  // ✅ LOGIN
   const login = async () => {
     try {
       const res = await fetch(`${BASE_URL}/auth/login`, {
@@ -44,7 +44,7 @@ function App() {
     }
   };
 
-  //  FETCH DATA
+  // ✅ FETCH DATA
   useEffect(() => {
     if (user) {
       fetch(`${BASE_URL}/api/products`)
@@ -67,7 +67,7 @@ function App() {
     }
   }, [user]);
 
-  // ADD TO CART
+  // ✅ ADD TO CART
   const addToCart = (p) => {
     fetch(`${BASE_URL}/cart`, {
       method: "POST",
@@ -79,13 +79,14 @@ function App() {
         price: p.price
       })
     }).then(() => {
-      fetch(`${BASE_URL}/cart/${user.id`)
+      // 🔥 FIXED LINE (important)
+      fetch(`${BASE_URL}/cart/${user.id}`)
         .then(res => res.json())
         .then(data => setCart(data));
     });
   };
 
-  //  REMOVE FROM CART
+  // ✅ REMOVE FROM CART
   const removeFromCart = (id) => {
     fetch(`${BASE_URL}/cart/${id}`, {
       method: "DELETE"
@@ -96,7 +97,7 @@ function App() {
     });
   };
 
-  // LOGIN UI
+  // ✅ LOGIN UI
   if (!user) {
     return (
       <div style={{ padding: "20px" }}>
@@ -160,7 +161,7 @@ function App() {
 
           {cart.length > 0 && (
             <button onClick={() => setShowPayment(true)}>
-              Payment 
+              Payment 💳
             </button>
           )}
 
@@ -170,7 +171,7 @@ function App() {
               <h2>Payment</h2>
 
               <button onClick={() => {
-                alert("Payment Successful ");
+                alert("Payment Successful ✅");
 
                 fetch(`${BASE_URL}/orders/checkout/${user.id}`, {
                   method: "POST"
