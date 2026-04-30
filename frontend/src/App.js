@@ -14,26 +14,37 @@ function App() {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  // LOGIN
+  //  LOGIN FIXED
   const login = async () => {
-    const res = await fetch(`${BASE_URL}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password })
-    });
+    try {
+      const res = await fetch(`${BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
 
-    const text = await res.text();
-    const data = text ? JSON.parse(text) : null;
+      if (!res.ok) {
+        alert("Login failed ");
+        return;
+      }
 
-    if (!data) {
-      alert("Login failed ❌");
-      return;
+      const data = await res.json();
+
+      if (!data) {
+        alert("Invalid credentials ");
+        return;
+      }
+
+      console.log("LOGIN SUCCESS:", data);
+      setUser(data);
+
+    } catch (err) {
+      console.error(err);
+      alert("Server error ");
     }
-
-    setUser(data);
   };
 
-  // FETCH DATA
+  //  FETCH DATA
   useEffect(() => {
     if (user) {
       fetch(`${BASE_URL}/api/products`)
@@ -68,13 +79,13 @@ function App() {
         price: p.price
       })
     }).then(() => {
-      fetch(`${BASE_URL}/cart/${user.id}`)
+      fetch(`${BASE_URL}/cart/${user.id`)
         .then(res => res.json())
         .then(data => setCart(data));
     });
   };
 
-  // REMOVE FROM CART
+  //  REMOVE FROM CART
   const removeFromCart = (id) => {
     fetch(`${BASE_URL}/cart/${id}`, {
       method: "DELETE"
@@ -91,8 +102,16 @@ function App() {
       <div style={{ padding: "20px" }}>
         <h1>Login</h1>
 
-        <input placeholder="Username" onChange={e => setUsername(e.target.value)} /><br /><br />
-        <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} /><br /><br />
+        <input
+          placeholder="Username"
+          onChange={e => setUsername(e.target.value)}
+        /><br /><br />
+
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={e => setPassword(e.target.value)}
+        /><br /><br />
 
         <button onClick={login}>Login</button>
       </div>
@@ -130,7 +149,7 @@ function App() {
               {c.productName} - ₹{c.price}
 
               <button onClick={() => removeFromCart(c.id)}>
-                Remove ❌
+                Remove 
               </button>
             </div>
           ))}
@@ -141,7 +160,7 @@ function App() {
 
           {cart.length > 0 && (
             <button onClick={() => setShowPayment(true)}>
-              Payment 💳
+              Payment 
             </button>
           )}
 
@@ -151,7 +170,7 @@ function App() {
               <h2>Payment</h2>
 
               <button onClick={() => {
-                alert("Payment Successful ✅");
+                alert("Payment Successful ");
 
                 fetch(`${BASE_URL}/orders/checkout/${user.id}`, {
                   method: "POST"
