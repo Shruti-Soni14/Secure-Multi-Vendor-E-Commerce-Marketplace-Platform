@@ -1,27 +1,33 @@
 package com.example.securemultivendorecommercemarketplaceplatform.controller;
 
 import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 @CrossOrigin(origins = "*")
 public class ProductController {
 
-    // GET all products (dummy)
+    // Demo data (temporary)
+    private List<Map<String, Object>> products = new ArrayList<>();
+
+    public ProductController() {
+        Map<String, Object> p1 = new HashMap<>();
+        p1.put("id", 1);
+        p1.put("name", "Laptop");
+        p1.put("price", 50000);
+
+        Map<String, Object> p2 = new HashMap<>();
+        p2.put("id", 2);
+        p2.put("name", "Mobile");
+        p2.put("price", 20000);
+
+        products.add(p1);
+        products.add(p2);
+    }
+
     @GetMapping
-    public String getProducts() {
-        return "Products API working (demo mode)";
-    }
-
-    // ADD product (dummy)
-    @PostMapping
-    public String addProduct() {
-        return "Product added (demo mode)";
-    }
-
-    // DELETE product (dummy)
-    @DeleteMapping("/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        return "Product deleted (demo mode)";
+    public List<Map<String, Object>> getProducts() {
+        return products;
     }
 }
