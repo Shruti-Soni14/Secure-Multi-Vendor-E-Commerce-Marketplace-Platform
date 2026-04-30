@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+const BASE_URL = "https://ecommerce-backend-g1wa.onrender.com";
+
 function App() {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
@@ -14,40 +16,40 @@ function App() {
 
   // LOGIN
   const login = async () => {
-  const res = await fetch("http://localhost:8080/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
+    const res = await fetch(`${BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
 
-  const text = await res.text();
-  const data = text ? JSON.parse(text) : null;
+    const text = await res.text();
+    const data = text ? JSON.parse(text) : null;
 
-  if (!data || data === "Invalid username or password") {
-    alert("Login failed ❌");
-    return;
-  }
+    if (!data) {
+      alert("Login failed ❌");
+      return;
+    }
 
-  setUser(data);
- };
+    setUser(data);
+  };
 
   // FETCH DATA
   useEffect(() => {
     if (user) {
-      fetch("http://localhost:8080/api/products")
+      fetch(`${BASE_URL}/api/products`)
         .then(res => res.json())
         .then(data => setProducts(data));
 
-      fetch(`http://localhost:8080/cart/${user.id}`)
+      fetch(`${BASE_URL}/cart/${user.id}`)
         .then(res => res.json())
         .then(data => setCart(data));
 
-      fetch(`http://localhost:8080/orders/${user.id}`)
+      fetch(`${BASE_URL}/orders/${user.id}`)
         .then(res => res.json())
         .then(data => setOrders(data));
 
       if (user.role === "ADMIN") {
-        fetch("http://localhost:8080/orders/all")
+        fetch(`${BASE_URL}/orders/all`)
           .then(res => res.json())
           .then(data => setAllOrders(data));
       }
@@ -56,7 +58,7 @@ function App() {
 
   // ADD TO CART
   const addToCart = (p) => {
-    fetch("http://localhost:8080/cart", {
+    fetch(`${BASE_URL}/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -66,7 +68,7 @@ function App() {
         price: p.price
       })
     }).then(() => {
-      fetch(`http://localhost:8080/cart/${user.id}`)
+      fetch(`${BASE_URL}/cart/${user.id}`)
         .then(res => res.json())
         .then(data => setCart(data));
     });
@@ -74,10 +76,10 @@ function App() {
 
   // REMOVE FROM CART
   const removeFromCart = (id) => {
-    fetch(`http://localhost:8080/cart/${id}`, {
+    fetch(`${BASE_URL}/cart/${id}`, {
       method: "DELETE"
     }).then(() => {
-      fetch(`http://localhost:8080/cart/${user.id}`)
+      fetch(`${BASE_URL}/cart/${user.id}`)
         .then(res => res.json())
         .then(data => setCart(data));
     });
@@ -86,7 +88,7 @@ function App() {
   // LOGIN UI
   if (!user) {
     return (
-      <div style={{ padding: "20px", fontFamily: "Arial" }}>
+      <div style={{ padding: "20px" }}>
         <h1>Login</h1>
 
         <input placeholder="Username" onChange={e => setUsername(e.target.value)} /><br /><br />
@@ -100,40 +102,18 @@ function App() {
   const uniqueProducts = [...new Map(products.map(p => [p.name, p])).values()];
 
   return (
-    <div style={{
-      padding: "20px",
-      fontFamily: "Arial",
-      backgroundColor: "#f5f5f5",
-      minHeight: "100vh"
-    }}>
-      <h1 style={{ color: "#333" }}>Welcome {user.username} 👋</h1>
+    <div style={{ padding: "20px" }}>
+      <h1>Welcome {user.username} 👋</h1>
 
       {/* PRODUCTS */}
       <h2>Products</h2>
 
       {uniqueProducts.map(p => (
-        <div key={p.id} style={{
-          backgroundColor: "white",
-          padding: "10px",
-          marginBottom: "10px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 5px rgba(0,0,0,0.1)"
-        }}>
+        <div key={p.id}>
           {p.name} - ₹{p.price}
 
           {user.role === "USER" && (
-            <button
-              onClick={() => addToCart(p)}
-              style={{
-                marginLeft: "10px",
-                backgroundColor: "#28a745",
-                color: "white",
-                border: "none",
-                padding: "6px 12px",
-                borderRadius: "5px",
-                cursor: "pointer"
-              }}
-            >
+            <button onClick={() => addToCart(p)}>
               Add to Cart
             </button>
           )}
@@ -143,109 +123,57 @@ function App() {
       {/* USER CART */}
       {user.role === "USER" && (
         <>
-          <h2 style={{ marginTop: "20px" }}>Your Cart 🛒</h2>
-
-          {cart.length === 0 && <p style={{ color: "gray" }}>Your cart is empty 😢</p>}
+          <h2>Your Cart 🛒</h2>
 
           {cart.map(c => (
-            <div key={c.id} style={{
-              backgroundColor: "white",
-              padding: "10px",
-              marginBottom: "10px",
-              borderRadius: "8px"
-            }}>
+            <div key={c.id}>
               {c.productName} - ₹{c.price}
 
-              <button
-                onClick={() => removeFromCart(c.id)}
-                style={{
-                  marginLeft: "10px",
-                  backgroundColor: "#dc3545",
-                  color: "white",
-                  border: "none",
-                  padding: "5px 10px",
-                  borderRadius: "5px",
-                  cursor: "pointer"
-                }}
-              >
+              <button onClick={() => removeFromCart(c.id)}>
                 Remove ❌
               </button>
             </div>
           ))}
 
-          <h3 style={{ color: "#007bff" }}>
+          <h3>
             Total: ₹{cart.reduce((sum, item) => sum + item.price, 0)}
           </h3>
 
           {cart.length > 0 && (
-            <button
-              onClick={() => setShowPayment(true)}
-              style={{
-                marginTop: "10px",
-                backgroundColor: "#007bff",
-                color: "white",
-                border: "none",
-                padding: "8px 15px",
-                borderRadius: "5px",
-                cursor: "pointer"
-              }}
-            >
-              Proceed to Payment 💳
+            <button onClick={() => setShowPayment(true)}>
+              Payment 💳
             </button>
           )}
 
-          {/* PAYMENT PAGE */}
+          {/* PAYMENT */}
           {showPayment && (
-            <div style={{
-              backgroundColor: "white",
-              padding: "20px",
-              marginTop: "20px",
-              borderRadius: "10px",
-              boxShadow: "0 3px 10px rgba(0,0,0,0.15)",
-              maxWidth: "300px"
-            }}>
-              <h2>Payment Details 💳</h2>
-
-              <input placeholder="Card Number" style={{ width: "90%", padding: "8px", marginBottom: "10px" }} />
-              <input placeholder="Card Holder Name" style={{ width: "90%", padding: "8px", marginBottom: "10px" }} />
-              <input placeholder="Expiry Date" style={{ width: "90%", padding: "8px", marginBottom: "10px" }} />
-              <input placeholder="CVV" type="password" style={{ width: "90%", padding: "8px", marginBottom: "10px" }} />
-
-              <h3>Total: ₹{cart.reduce((sum, item) => sum + item.price, 0)}</h3>
+            <div>
+              <h2>Payment</h2>
 
               <button onClick={() => {
                 alert("Payment Successful ✅");
 
-                fetch(`http://localhost:8080/orders/checkout/${user.id}`, {
+                fetch(`${BASE_URL}/orders/checkout/${user.id}`, {
                   method: "POST"
                 }).then(() => {
                   setCart([]);
                   setShowPayment(false);
 
-                  fetch(`http://localhost:8080/orders/${user.id}`)
+                  fetch(`${BASE_URL}/orders/${user.id}`)
                     .then(res => res.json())
                     .then(data => setOrders(data));
                 });
               }}>
-                Pay Now 💳
-              </button>
-
-              <button onClick={() => setShowPayment(false)} style={{ marginLeft: "10px" }}>
-                Cancel ❌
+                Pay Now
               </button>
             </div>
           )}
 
           {/* ORDER HISTORY */}
-          <h2 style={{ marginTop: "20px" }}>Order History 📦</h2>
+          <h2>Orders</h2>
 
           {orders.map(o => (
-            <div key={o.id} style={{
-              backgroundColor: "white",
-              padding: "8px",
-              borderRadius: "6px",
-              marginBottom: "5px"
-            }}>
+            <div key={o.id}>
               {o.productName} - ₹{o.price}
             </div>
           ))}
@@ -255,7 +183,7 @@ function App() {
       {/* ADMIN */}
       {user.role === "ADMIN" && (
         <>
-          <h2>All Orders 📦</h2>
+          <h2>All Orders</h2>
 
           {allOrders.map(o => (
             <div key={o.id}>
