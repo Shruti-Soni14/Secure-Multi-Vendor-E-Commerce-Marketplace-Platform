@@ -2,36 +2,57 @@ package com.example.securemultivendorecommercemarketplaceplatform.controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.example.securemultivendorecommercemarketplaceplatform.model.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*") // render ke liye better
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
     private BCryptPasswordEncoder encoder;
 
-    // TEST
-    @GetMapping("/signup")
+    //  TEST API
+    @GetMapping("/test")
     public String test() {
-        return "Signup API working";
+        return "Auth API working";
     }
 
-    // SIGNUP (dummy)
+    //  SIGNUP (demo)
     @PostMapping("/signup")
-    public String signup(@RequestBody User user) {
+    public User signup(@RequestBody User user) {
 
-        String encodedPassword = encoder.encode(user.getPassword());
+        User newUser = new User();
+        newUser.setId(1L);
+        newUser.setUsername(user.getUsername());
 
-        return "Signup successful (demo mode)";
+        // password encode (optional demo)
+        newUser.setPassword(encoder.encode(user.getPassword()));
+
+        newUser.setRole("USER");
+
+        return newUser;
     }
 
-    // LOGIN (dummy)
+    //  LOGIN (IMPORTANT FIXED)
     @PostMapping("/login")
-    public String login(@RequestBody User user) {
+    public User login(@RequestBody User user) {
 
-        return "Login successful (demo mode)";
+        //  Demo login (no DB)
+        User loggedInUser = new User();
+
+        loggedInUser.setId(1L);
+        loggedInUser.setUsername(user.getUsername());
+
+        //  Role logic (for testing)
+        if ("admin".equals(user.getUsername())) {
+            loggedInUser.setRole("ADMIN");
+        } else {
+            loggedInUser.setRole("USER");
+        }
+
+        return loggedInUser;
     }
 }
