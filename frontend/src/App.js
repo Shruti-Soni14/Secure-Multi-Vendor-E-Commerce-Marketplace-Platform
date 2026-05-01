@@ -14,33 +14,38 @@ function App() {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  // ✅ LOGIN
+  // ✅ LOGIN FIXED
   const login = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/auth/login`, {
+      const res = await fetch(`${BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
       });
 
+      console.log("STATUS:", res.status);
+
       if (!res.ok) {
-        alert("Login failed ");
+        const text = await res.text();
+        console.log("ERROR RESPONSE:", text);
+        alert("Login failed ❌");
         return;
       }
 
       const data = await res.json();
 
+      console.log("LOGIN SUCCESS:", data);
+
       if (!data) {
-        alert("Invalid credentials ");
+        alert("Invalid credentials ❌");
         return;
       }
 
-      console.log("LOGIN SUCCESS:", data);
       setUser(data);
 
     } catch (err) {
-      console.error(err);
-      alert("Server error ");
+      console.error("FETCH ERROR:", err);
+      alert("Server error ❌");
     }
   };
 
@@ -79,7 +84,6 @@ function App() {
         price: p.price
       })
     }).then(() => {
-      // 🔥 FIXED LINE (important)
       fetch(`${BASE_URL}/cart/${user.id}`)
         .then(res => res.json())
         .then(data => setCart(data));
@@ -125,7 +129,6 @@ function App() {
     <div style={{ padding: "20px" }}>
       <h1>Welcome {user.username} 👋</h1>
 
-      {/* PRODUCTS */}
       <h2>Products</h2>
 
       {uniqueProducts.map(p => (
@@ -140,7 +143,6 @@ function App() {
         </div>
       ))}
 
-      {/* USER CART */}
       {user.role === "USER" && (
         <>
           <h2>Your Cart 🛒</h2>
@@ -150,7 +152,7 @@ function App() {
               {c.productName} - ₹{c.price}
 
               <button onClick={() => removeFromCart(c.id)}>
-                Remove 
+                Remove
               </button>
             </div>
           ))}
@@ -165,7 +167,6 @@ function App() {
             </button>
           )}
 
-          {/* PAYMENT */}
           {showPayment && (
             <div>
               <h2>Payment</h2>
@@ -189,7 +190,6 @@ function App() {
             </div>
           )}
 
-          {/* ORDER HISTORY */}
           <h2>Orders</h2>
 
           {orders.map(o => (
@@ -200,7 +200,6 @@ function App() {
         </>
       )}
 
-      {/* ADMIN */}
       {user.role === "ADMIN" && (
         <>
           <h2>All Orders</h2>
