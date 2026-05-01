@@ -14,7 +14,7 @@ function App() {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  // ✅ LOGIN FIXED
+  //  LOGIN FIXED
   const login = async () => {
     try {
       const res = await fetch(`${BASE_URL}/api/auth/login`, {
@@ -28,7 +28,7 @@ function App() {
       if (!res.ok) {
         const text = await res.text();
         console.log("ERROR RESPONSE:", text);
-        alert("Login failed ❌");
+        alert("Login failed ");
         return;
       }
 
@@ -37,7 +37,7 @@ function App() {
       console.log("LOGIN SUCCESS:", data);
 
       if (!data) {
-        alert("Invalid credentials ❌");
+        alert("Invalid credentials ");
         return;
       }
 
@@ -45,11 +45,11 @@ function App() {
 
     } catch (err) {
       console.error("FETCH ERROR:", err);
-      alert("Server error ❌");
+      alert("Server error ");
     }
   };
 
-  // ✅ FETCH DATA
+  //  FETCH DATA
   useEffect(() => {
     if (user) {
       fetch(`${BASE_URL}/api/products`)
@@ -72,7 +72,7 @@ function App() {
     }
   }, [user]);
 
-  // ✅ ADD TO CART
+  //  ADD TO CART
   const addToCart = (p) => {
     fetch(`${BASE_URL}/cart`, {
       method: "POST",
@@ -90,7 +90,7 @@ function App() {
     });
   };
 
-  // ✅ REMOVE FROM CART
+  //  REMOVE FROM CART
   const removeFromCart = (id) => {
     fetch(`${BASE_URL}/cart/${id}`, {
       method: "DELETE"
@@ -101,7 +101,7 @@ function App() {
     });
   };
 
-  // ✅ LOGIN UI
+  //  LOGIN UI
   if (!user) {
     return (
       <div style={{ padding: "20px" }}>
@@ -163,7 +163,7 @@ function App() {
 
           {cart.length > 0 && (
             <button onClick={() => setShowPayment(true)}>
-              Payment 💳
+              Payment 
             </button>
           )}
 
@@ -172,7 +172,7 @@ function App() {
               <h2>Payment</h2>
 
               <button onClick={() => {
-                alert("Payment Successful ✅");
+                alert("Payment Successful ");
 
                 fetch(`${BASE_URL}/orders/checkout/${user.id}`, {
                   method: "POST"
