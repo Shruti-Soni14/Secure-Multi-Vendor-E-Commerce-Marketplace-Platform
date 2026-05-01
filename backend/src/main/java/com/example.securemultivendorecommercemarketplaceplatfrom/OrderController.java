@@ -3,10 +3,10 @@ package com.example.securemultivendorecommercemarketplaceplatform.controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
-
+import static com.example.securemultivendorecommercemarketplaceplatform.controller.CartController.cart;
 
 @RestController
-@RequestMapping("/orders")   
+@RequestMapping("/api/orders")
 @CrossOrigin(origins = "*")
 public class OrderController {
 
