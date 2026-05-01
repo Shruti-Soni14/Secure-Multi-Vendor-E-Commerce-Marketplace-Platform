@@ -8,29 +8,42 @@ import java.util.*;
 @CrossOrigin(origins = "*")
 public class CartController {
 
+    
     public static List<Map<String, Object>> cart = new ArrayList<>();
 
+    //  ADD TO CART
     @PostMapping
     public Map<String, Object> addToCart(@RequestBody Map<String, Object> item) {
+
         item.put("id", cart.size() + 1);
+
+        item.put("userId", Long.valueOf(item.get("userId").toString()));
+
         cart.add(item);
+
         return item;
     }
 
+    //  GET USER CART (FIXED)
     @GetMapping("/{userId}")
     public List<Map<String, Object>> getCart(@PathVariable Long userId) {
+
         List<Map<String, Object>> result = new ArrayList<>();
 
         for (Map<String, Object> c : cart) {
-            if (c.get("userId").equals(userId)) {
+            if (Long.valueOf(c.get("userId").toString()).equals(userId)) {
                 result.add(c);
             }
         }
+
         return result;
     }
 
+    //  DELETE ITEM
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable Long id) {
-        cart.removeIf(c -> c.get("id").equals(id));
+    public void removeFromCart(@PathVariable Long id) {
+
+        cart.removeIf(c -> Long.valueOf(c.get("id").toString()).equals(id));
     }
 }
+  
