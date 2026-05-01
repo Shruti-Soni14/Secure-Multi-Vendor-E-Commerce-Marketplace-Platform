@@ -8,7 +8,6 @@ import java.util.*;
 @CrossOrigin(origins = "*")
 public class ProductController {
 
-    // Demo data (temporary)
     private List<Map<String, Object>> products = new ArrayList<>();
 
     public ProductController() {
