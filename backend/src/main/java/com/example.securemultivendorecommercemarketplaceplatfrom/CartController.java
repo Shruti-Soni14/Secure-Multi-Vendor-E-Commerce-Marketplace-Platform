@@ -4,11 +4,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/cart")   
+@RequestMapping("/api/cart")
 @CrossOrigin(origins = "*")
 public class CartController {
 
-    private List<Map<String, Object>> cart = new ArrayList<>();
+    public static List<Map<String, Object>> cart = new ArrayList<>();
 
     @PostMapping
     public Map<String, Object> addToCart(@RequestBody Map<String, Object> item) {
@@ -30,7 +30,7 @@ public class CartController {
     }
 
     @DeleteMapping("/{id}")
-    public void removeFromCart(@PathVariable Long id) {
+    public void remove(@PathVariable Long id) {
         cart.removeIf(c -> c.get("id").equals(id));
     }
 }
