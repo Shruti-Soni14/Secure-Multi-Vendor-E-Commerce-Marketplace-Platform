@@ -14,10 +14,10 @@ function App() {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  //  LOGIN FIXED
+  //  LOGIN FIXED (IMPORTANT)
   const login = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/api/auth/login`, {
+      const res = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
@@ -33,13 +33,7 @@ function App() {
       }
 
       const data = await res.json();
-
       console.log("LOGIN SUCCESS:", data);
-
-      if (!data) {
-        alert("Invalid credentials ");
-        return;
-      }
 
       setUser(data);
 
@@ -54,20 +48,24 @@ function App() {
     if (user) {
       fetch(`${BASE_URL}/api/products`)
         .then(res => res.json())
-        .then(data => setProducts(data));
+        .then(data => setProducts(data))
+        .catch(err => console.error("Products error:", err));
 
       fetch(`${BASE_URL}/cart/${user.id}`)
         .then(res => res.json())
-        .then(data => setCart(data));
+        .then(data => setCart(data))
+        .catch(err => console.error("Cart error:", err));
 
       fetch(`${BASE_URL}/orders/${user.id}`)
         .then(res => res.json())
-        .then(data => setOrders(data));
+        .then(data => setOrders(data))
+        .catch(err => console.error("Orders error:", err));
 
       if (user.role === "ADMIN") {
         fetch(`${BASE_URL}/orders/all`)
           .then(res => res.json())
-          .then(data => setAllOrders(data));
+          .then(data => setAllOrders(data))
+          .catch(err => console.error("All Orders error:", err));
       }
     }
   }, [user]);
@@ -127,8 +125,9 @@ function App() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Welcome {user.username} 👋</h1>
+      <h1>Welcome {user.username} </h1>
 
+      {/* PRODUCTS */}
       <h2>Products</h2>
 
       {uniqueProducts.map(p => (
@@ -143,6 +142,7 @@ function App() {
         </div>
       ))}
 
+      {/* USER */}
       {user.role === "USER" && (
         <>
           <h2>Your Cart 🛒</h2>
@@ -167,6 +167,7 @@ function App() {
             </button>
           )}
 
+          {/* PAYMENT */}
           {showPayment && (
             <div>
               <h2>Payment</h2>
@@ -190,6 +191,7 @@ function App() {
             </div>
           )}
 
+          {/* ORDERS */}
           <h2>Orders</h2>
 
           {orders.map(o => (
@@ -200,6 +202,7 @@ function App() {
         </>
       )}
 
+      {/* ADMIN */}
       {user.role === "ADMIN" && (
         <>
           <h2>All Orders</h2>
