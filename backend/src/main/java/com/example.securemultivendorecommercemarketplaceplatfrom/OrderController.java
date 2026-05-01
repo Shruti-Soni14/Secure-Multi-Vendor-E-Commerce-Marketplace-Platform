@@ -3,15 +3,15 @@ package com.example.securemultivendorecommercemarketplaceplatform.controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
+
+
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")   
 @CrossOrigin(origins = "*")
 public class OrderController {
 
     private List<Map<String, Object>> orders = new ArrayList<>();
-    private List<Map<String, Object>> cart = new ArrayList<>();
 
-    //  CHECKOUT
     @PostMapping("/checkout/{userId}")
     public List<Map<String, Object>> checkout(@PathVariable Long userId) {
 
@@ -38,10 +38,8 @@ public class OrderController {
         return orders;
     }
 
-    //  USER ORDERS
     @GetMapping("/{userId}")
     public List<Map<String, Object>> getOrders(@PathVariable Long userId) {
-
         List<Map<String, Object>> result = new ArrayList<>();
 
         for (Map<String, Object> o : orders) {
@@ -49,11 +47,9 @@ public class OrderController {
                 result.add(o);
             }
         }
-
         return result;
     }
 
-    //  ADMIN
     @GetMapping("/all")
     public List<Map<String, Object>> getAllOrders() {
         return orders;
