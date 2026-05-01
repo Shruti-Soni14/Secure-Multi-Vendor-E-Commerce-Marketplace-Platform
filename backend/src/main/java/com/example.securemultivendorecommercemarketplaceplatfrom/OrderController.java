@@ -1,32 +1,61 @@
 package com.example.securemultivendorecommercemarketplaceplatform.controller;
 
 import org.springframework.web.bind.annotation.*;
+import java.util.*;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 @CrossOrigin(origins = "*")
 public class OrderController {
 
-     @GetMapping
-    public String test() {
-        return "Orders API working";
-    }
+    private List<Map<String, Object>> orders = new ArrayList<>();
+    private List<Map<String, Object>> cart = new ArrayList<>();
 
-    // CHECKOUT (dummy)
+    //  CHECKOUT
     @PostMapping("/checkout/{userId}")
-    public String checkout(@PathVariable Long userId) {
-        return "Order placed successfully (demo mode)";
+    public List<Map<String, Object>> checkout(@PathVariable Long userId) {
+
+        List<Map<String, Object>> userCart = new ArrayList<>();
+
+        for (Map<String, Object> c : cart) {
+            if (c.get("userId").equals(userId)) {
+                userCart.add(c);
+            }
+        }
+
+        for (Map<String, Object> c : userCart) {
+            Map<String, Object> order = new HashMap<>();
+            order.put("id", orders.size() + 1);
+            order.put("userId", userId);
+            order.put("productName", c.get("productName"));
+            order.put("price", c.get("price"));
+
+            orders.add(order);
+        }
+
+        cart.removeIf(c -> c.get("userId").equals(userId));
+
+        return orders;
     }
 
-    // USER: ORDER HISTORY (dummy)
+    //  USER ORDERS
     @GetMapping("/{userId}")
-    public String getOrders(@PathVariable Long userId) {
-        return "User orders (demo mode)";
+    public List<Map<String, Object>> getOrders(@PathVariable Long userId) {
+
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        for (Map<String, Object> o : orders) {
+            if (o.get("userId").equals(userId)) {
+                result.add(o);
+            }
+        }
+
+        return result;
     }
 
-    // ADMIN: ALL ORDERS (dummy)
+    //  ADMIN
     @GetMapping("/all")
-    public String getAllOrders() {
-        return "All orders (demo mode)";
+    public List<Map<String, Object>> getAllOrders() {
+        return orders;
     }
 }
