@@ -25,8 +25,19 @@ public class ProductController {
         products.add(p2);
     }
 
+    //  GET ALL
     @GetMapping
     public List<Map<String, Object>> getProducts() {
         return products;
+    }
+
+    //  ADD PRODUCT (NEW )
+    @PostMapping
+    public Map<String, Object> addProduct(@RequestBody Map<String, Object> product) {
+
+        product.put("id", products.size() + 1);
+        products.add(product);
+
+        return product;
     }
 }
