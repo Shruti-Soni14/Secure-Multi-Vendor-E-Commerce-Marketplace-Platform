@@ -14,7 +14,7 @@ function App() {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  //  LOGIN FIXED (IMPORTANT)
+  //  LOGIN
   const login = async () => {
     try {
       const res = await fetch(`${BASE_URL}/auth/login`, {
@@ -23,22 +23,16 @@ function App() {
         body: JSON.stringify({ username, password })
       });
 
-      console.log("STATUS:", res.status);
-
       if (!res.ok) {
-        const text = await res.text();
-        console.log("ERROR RESPONSE:", text);
         alert("Login failed ");
         return;
       }
 
       const data = await res.json();
-      console.log("LOGIN SUCCESS:", data);
-
       setUser(data);
 
     } catch (err) {
-      console.error("FETCH ERROR:", err);
+      console.error(err);
       alert("Server error ");
     }
   };
@@ -48,31 +42,27 @@ function App() {
     if (user) {
       fetch(`${BASE_URL}/api/products`)
         .then(res => res.json())
-        .then(data => setProducts(data))
-        .catch(err => console.error("Products error:", err));
+        .then(data => setProducts(data));
 
-      fetch(`${BASE_URL}/cart/${user.id}`)
+      fetch(`${BASE_URL}/api/cart/${user.id}`)
         .then(res => res.json())
-        .then(data => setCart(data))
-        .catch(err => console.error("Cart error:", err));
+        .then(data => setCart(data));
 
-      fetch(`${BASE_URL}/orders/${user.id}`)
+      fetch(`${BASE_URL}/api/orders/${user.id}`)
         .then(res => res.json())
-        .then(data => setOrders(data))
-        .catch(err => console.error("Orders error:", err));
+        .then(data => setOrders(data));
 
       if (user.role === "ADMIN") {
-        fetch(`${BASE_URL}/orders/all`)
+        fetch(`${BASE_URL}/api/orders/all`)
           .then(res => res.json())
-          .then(data => setAllOrders(data))
-          .catch(err => console.error("All Orders error:", err));
+          .then(data => setAllOrders(data));
       }
     }
   }, [user]);
 
-  //  ADD TO CART
+  //  ADD TO CART (FIXED)
   const addToCart = (p) => {
-    fetch(`${BASE_URL}/cart`, {
+    fetch(`${BASE_URL}/api/cart`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -82,18 +72,18 @@ function App() {
         price: p.price
       })
     }).then(() => {
-      fetch(`${BASE_URL}/cart/${user.id}`)
+      fetch(`${BASE_URL}/api/cart/${user.id}`)
         .then(res => res.json())
         .then(data => setCart(data));
     });
   };
 
-  //  REMOVE FROM CART
+  //  REMOVE FROM CART (FIXED)
   const removeFromCart = (id) => {
-    fetch(`${BASE_URL}/cart/${id}`, {
+    fetch(`${BASE_URL}/api/cart/${id}`, {
       method: "DELETE"
     }).then(() => {
-      fetch(`${BASE_URL}/cart/${user.id}`)
+      fetch(`${BASE_URL}/api/cart/${user.id}`)
         .then(res => res.json())
         .then(data => setCart(data));
     });
@@ -142,7 +132,7 @@ function App() {
         </div>
       ))}
 
-      {/* USER */}
+      {/* USER CART */}
       {user.role === "USER" && (
         <>
           <h2>Your Cart 🛒</h2>
@@ -175,13 +165,13 @@ function App() {
               <button onClick={() => {
                 alert("Payment Successful ");
 
-                fetch(`${BASE_URL}/orders/checkout/${user.id}`, {
+                fetch(`${BASE_URL}/api/orders/checkout/${user.id}`, {
                   method: "POST"
                 }).then(() => {
                   setCart([]);
                   setShowPayment(false);
 
-                  fetch(`${BASE_URL}/orders/${user.id}`)
+                  fetch(`${BASE_URL}/api/orders/${user.id}`)
                     .then(res => res.json())
                     .then(data => setOrders(data));
                 });
