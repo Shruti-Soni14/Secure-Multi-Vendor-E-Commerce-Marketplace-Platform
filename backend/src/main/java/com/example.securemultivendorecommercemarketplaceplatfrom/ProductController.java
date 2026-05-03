@@ -1,43 +1,29 @@
 package com.example.securemultivendorecommercemarketplaceplatform.controller;
 
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.securemultivendorecommercemarketplaceplatform.model.Product;
+import com.example.securemultivendorecommercemarketplaceplatform.repository.ProductRepository;
 
 @RestController
 @RequestMapping("/api/products")
 @CrossOrigin(origins = "*")
 public class ProductController {
 
-    private List<Map<String, Object>> products = new ArrayList<>();
+    @Autowired
+    private ProductRepository repo;
 
-    public ProductController() {
-        Map<String, Object> p1 = new HashMap<>();
-        p1.put("id", 1);
-        p1.put("name", "Laptop");
-        p1.put("price", 50000);
-
-        Map<String, Object> p2 = new HashMap<>();
-        p2.put("id", 2);
-        p2.put("name", "Mobile");
-        p2.put("price", 20000);
-
-        products.add(p1);
-        products.add(p2);
-    }
-
-    //  GET ALL
+    //  GET ALL PRODUCTS (DB से)
     @GetMapping
-    public List<Map<String, Object>> getProducts() {
-        return products;
+    public List<Product> getProducts() {
+        return repo.findAll();
     }
 
-    //  ADD PRODUCT (NEW )
+    //  ADD PRODUCT (DB में save)
     @PostMapping
-    public Map<String, Object> addProduct(@RequestBody Map<String, Object> product) {
-
-        product.put("id", products.size() + 1);
-        products.add(product);
-
-        return product;
+    public Product addProduct(@RequestBody Product product) {
+        return repo.save(product);
     }
 }
