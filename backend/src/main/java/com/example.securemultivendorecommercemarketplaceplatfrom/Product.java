@@ -3,6 +3,7 @@ package com.example.securemultivendorecommercemarketplaceplatform.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -12,21 +13,28 @@ public class Product {
     private String name;
     private double price;
 
+    //  getters setters
+    public Long getId() {
+        return id;
+    }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    // getters setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public String getName() {
+        return name;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public double getPrice() {
+        return price;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }
