@@ -15,15 +15,33 @@ public class ProductController {
     @Autowired
     private ProductRepository repo;
 
-    //  GET ALL PRODUCTS (DB से)
+    //  GET ALL PRODUCTS
     @GetMapping
-    public List<Product> getProducts() {
+    public List<Product> getAllProducts() {
         return repo.findAll();
     }
 
-    //  ADD PRODUCT (DB में save)
+    //  ADD PRODUCT
     @PostMapping
     public Product addProduct(@RequestBody Product product) {
         return repo.save(product);
+    }
+
+    //  DELETE PRODUCT
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        repo.deleteById(id);
+    }
+
+    //  UPDATE PRODUCT
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product newProduct) {
+
+        Product p = repo.findById(id).orElseThrow();
+
+        p.setName(newProduct.getName());
+        p.setPrice(newProduct.getPrice());
+
+        return repo.save(p);
     }
 }
