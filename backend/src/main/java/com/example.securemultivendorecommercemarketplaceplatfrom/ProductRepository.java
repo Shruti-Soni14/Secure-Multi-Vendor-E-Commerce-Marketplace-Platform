@@ -1,14 +1,13 @@
-package com.example.securemultivendorecommercemarketplaceplatform.repository;
+package com.example.securemultivendorecommercemarketplaceplatform.repository; 
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.securemultivendorecommercemarketplaceplatform.model.Product;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository; 
+import com.example.securemultivendorecommercemarketplaceplatform.model.Product; 
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+import java.util.List; 
 
-    //  correct relation query
-    List<Product> findByUser_Id(Long userId);
-
-    //  check duplicate product name
-    boolean existsByName(String name);
-}
+public interface ProductRepository extends JpaRepository<Product, Long> { 
+    
+    
+    List<Product> findByUserId(Long userId);
+    boolean existsByName(String name); 
+} 
