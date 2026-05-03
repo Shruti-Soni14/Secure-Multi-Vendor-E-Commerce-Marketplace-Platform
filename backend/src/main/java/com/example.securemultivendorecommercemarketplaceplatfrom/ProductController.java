@@ -9,39 +9,19 @@ import com.example.securemultivendorecommercemarketplaceplatform.repository.Prod
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 public class ProductController {
 
     @Autowired
     private ProductRepository repo;
 
-    //  GET ALL PRODUCTS
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<Product> getAll() {
         return repo.findAll();
     }
 
-    //  ADD PRODUCT
     @PostMapping
-    public Product addProduct(@RequestBody Product product) {
-        return repo.save(product);
-    }
-
-    //  DELETE PRODUCT
-    @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        repo.deleteById(id);
-    }
-
-    //  UPDATE PRODUCT
-    @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody Product newProduct) {
-
-        Product p = repo.findById(id).orElseThrow();
-
-        p.setName(newProduct.getName());
-        p.setPrice(newProduct.getPrice());
-
+    public Product add(@RequestBody Product p) {
         return repo.save(p);
     }
 }
