@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    //  correct relation query
+    List<Product> findByUser_Id(Long userId);
 
-    List<Product> findByUserId(Long userId);
+    //  check duplicate product name
     boolean existsByName(String name);
 }
