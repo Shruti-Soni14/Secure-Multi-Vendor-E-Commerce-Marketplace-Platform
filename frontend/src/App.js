@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const BASE_URL = "https://ecommerce-backend-g1wa.onrender.com";
 
@@ -14,11 +15,7 @@ function App() {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  //  ADMIN PRODUCT FORM
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    price: ""
-  });
+  const [newProduct, setNewProduct] = useState({ name: "", price: "" });
 
   // LOGIN
   const login = async () => {
@@ -32,25 +29,15 @@ function App() {
     setUser(data);
   };
 
-  // FETCH DATA
+  // FETCH
   useEffect(() => {
     if (user) {
-      fetch(`${BASE_URL}/api/products`)
-        .then(res => res.json())
-        .then(setProducts);
-
-      fetch(`${BASE_URL}/api/cart/${user.id}`)
-        .then(res => res.json())
-        .then(setCart);
-
-      fetch(`${BASE_URL}/api/orders/${user.id}`)
-        .then(res => res.json())
-        .then(setOrders);
+      fetch(`${BASE_URL}/api/products`).then(r => r.json()).then(setProducts);
+      fetch(`${BASE_URL}/api/cart/${user.id}`).then(r => r.json()).then(setCart);
+      fetch(`${BASE_URL}/api/orders/${user.id}`).then(r => r.json()).then(setOrders);
 
       if (user.role === "ADMIN") {
-        fetch(`${BASE_URL}/api/orders/all`)
-          .then(res => res.json())
-          .then(setAllOrders);
+        fetch(`${BASE_URL}/api/orders/all`).then(r => r.json()).then(setAllOrders);
       }
     }
   }, [user]);
@@ -59,21 +46,15 @@ function App() {
   const addProduct = () => {
     fetch(`${BASE_URL}/api/products`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         name: newProduct.name,
         price: Number(newProduct.price)
       })
     }).then(() => {
       alert("Product Added ");
-
       setNewProduct({ name: "", price: "" });
-
-      fetch(`${BASE_URL}/api/products`)
-        .then(res => res.json())
-        .then(setProducts);
+      fetch(`${BASE_URL}/api/products`).then(r => r.json()).then(setProducts);
     });
   };
 
@@ -81,129 +62,153 @@ function App() {
   const addToCart = (p) => {
     fetch(`${BASE_URL}/api/cart`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         userId: user.id,
         productName: p.name,
         price: p.price
       })
     }).then(() => {
-      fetch(`${BASE_URL}/api/cart/${user.id}`)
-        .then(res => res.json())
-        .then(setCart);
+      fetch(`${BASE_URL}/api/cart/${user.id}`).then(r => r.json()).then(setCart);
     });
   };
 
-  // REMOVE
   const removeFromCart = (id) => {
-    fetch(`${BASE_URL}/api/cart/${id}`, {
-      method: "DELETE"
-    }).then(() => {
-      fetch(`${BASE_URL}/api/cart/${user.id}`)
-        .then(res => res.json())
-        .then(setCart);
-    });
+    fetch(`${BASE_URL}/api/cart/${id}`, { method: "DELETE" })
+      .then(() => {
+        fetch(`${BASE_URL}/api/cart/${user.id}`).then(r => r.json()).then(setCart);
+      });
   };
 
   // LOGIN UI
   if (!user) {
     return (
-      <div style={{ padding: 20 }}>
-        <h2>Login</h2>
+      <div className="container mt-5">
+        <div className="card p-4 shadow">
+          <h3 className="text-center mb-3">Login</h3>
 
-        <input placeholder="Username" onChange={e => setUsername(e.target.value)} /><br /><br />
-        <input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} /><br /><br />
+          <input className="form-control mb-2"
+            placeholder="Username"
+            onChange={e => setUsername(e.target.value)} />
 
-        <button onClick={login}>Login</button>
+          <input className="form-control mb-3"
+            type="password"
+            placeholder="Password"
+            onChange={e => setPassword(e.target.value)} />
+
+          <button className="btn btn-primary w-100" onClick={login}>
+            Login
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Welcome {user.username}</h2>
+    <div className="container mt-4">
 
-      {/* ================= ADMIN PANEL ================= */}
+      <h2 className="mb-4">Welcome {user.username} 👋</h2>
+
+      {/* ADMIN PANEL */}
       {user.role === "ADMIN" && (
-        <>
-          <h2>Admin Panel 🛠️</h2>
+        <div className="card p-3 mb-4 shadow">
+          <h4>Admin Panel 🛠️</h4>
 
-          {/* ADD PRODUCT */}
-          <h3>Add Product</h3>
-          <input
-            placeholder="Product Name"
-            value={newProduct.name}
-            onChange={e => setNewProduct({ ...newProduct, name: e.target.value })}
-          /><br /><br />
+          <div className="row">
+            <div className="col-md-4">
+              <input className="form-control mb-2"
+                placeholder="Product Name"
+                value={newProduct.name}
+                onChange={e => setNewProduct({...newProduct, name: e.target.value})} />
+            </div>
 
-          <input
-            placeholder="Price"
-            value={newProduct.price}
-            onChange={e => setNewProduct({ ...newProduct, price: e.target.value })}
-          /><br /><br />
+            <div className="col-md-4">
+              <input className="form-control mb-2"
+                placeholder="Price"
+                value={newProduct.price}
+                onChange={e => setNewProduct({...newProduct, price: e.target.value})} />
+            </div>
 
-          <button onClick={addProduct}>Add Product</button>
+            <div className="col-md-4">
+              <button className="btn btn-success w-100" onClick={addProduct}>
+                Add Product
+              </button>
+            </div>
+          </div>
 
-          {/* ALL ORDERS */}
-          <h3>All Orders 📦</h3>
+          <h5 className="mt-4">All Orders 📦</h5>
           {allOrders.map(o => (
-            <div key={o.id}>
+            <div className="border p-2 mb-2 rounded">
               User: {o.userId} | {o.productName} - ₹{o.price}
             </div>
           ))}
-        </>
+        </div>
       )}
 
-      {/* ================= USER PANEL ================= */}
-      {user.role === "USER" && (
+      {/* PRODUCTS */}
+      <h4>Products</h4>
+      <div className="row">
+        {products.map(p => (
+          <div className="col-md-4 mb-3" key={p.id}>
+            <div className="card p-3 shadow-sm">
+              <h5>{p.name}</h5>
+              <p>₹{p.price}</p>
+              <button className="btn btn-success"
+                onClick={() => addToCart(p)}>
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* CART */}
+      <h4>Cart 🛒</h4>
+      {cart.map(c => (
+        <div className="card p-2 mb-2">
+          {c.productName} - ₹{c.price}
+          <button className="btn btn-danger btn-sm float-end"
+            onClick={() => removeFromCart(c.id)}>
+            Remove
+          </button>
+        </div>
+      ))}
+
+      <h5>Total: ₹{cart.reduce((s,i)=>s+i.price,0)}</h5>
+
+      {cart.length > 0 && (
         <>
-          <h3>Products</h3>
-          {products.map(p => (
-            <div key={p.id}>
-              {p.name} - ₹{p.price}
-              <button onClick={() => addToCart(p)}>Add</button>
+          <button className="btn btn-primary mt-2"
+            onClick={() => setShowPayment(true)}>
+            Proceed to Payment 💳
+          </button>
+
+          {showPayment && (
+            <div className="card p-3 mt-3 shadow">
+              <h5>Payment</h5>
+              <button className="btn btn-success"
+                onClick={() => {
+                  fetch(`${BASE_URL}/api/orders/checkout/${user.id}`, {method:"POST"})
+                  .then(() => {
+                    setCart([]);
+                    setShowPayment(false);
+                  });
+                }}>
+                Pay Now
+              </button>
             </div>
-          ))}
-
-          <h3>Cart</h3>
-          {cart.map(c => (
-            <div key={c.id}>
-              {c.productName} - ₹{c.price}
-              <button onClick={() => removeFromCart(c.id)}>Remove</button>
-            </div>
-          ))}
-
-          <h4>Total: ₹{cart.reduce((s, i) => s + i.price, 0)}</h4>
-
-          {cart.length > 0 && (
-            <>
-              <button onClick={() => setShowPayment(true)}>Payment</button>
-
-              {showPayment && (
-                <div>
-                  <button onClick={() => {
-                    fetch(`${BASE_URL}/api/orders/checkout/${user.id}`, {
-                      method: "POST"
-                    }).then(() => {
-                      setCart([]);
-                      setShowPayment(false);
-                    });
-                  }}>
-                    Pay Now
-                  </button>
-                </div>
-              )}
-            </>
           )}
-
-          <h3>Orders</h3>
-          {orders.map(o => (
-            <div key={o.id}>
-              {o.productName} - ₹{o.price}
-            </div>
-          ))}
         </>
       )}
+
+      {/* ORDERS */}
+      <h4 className="mt-4">Orders</h4>
+      {orders.map(o => (
+        <div className="card p-2 mb-2">
+          {o.productName} - ₹{o.price}
+        </div>
+      ))}
+
     </div>
   );
 }
