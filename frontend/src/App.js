@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const BASE_URL = "https://ecommerce-backend-g1wa.onrender.com";
 
 function App() {
+
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -15,16 +16,16 @@ function App() {
 
   const [showPayment, setShowPayment] = useState(false);
 
-  //  SEARCH + FILTER
+  // SEARCH + FILTER
   const [search, setSearch] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
-  //  ADMIN ADD PRODUCT
+  // ADMIN ADD PRODUCT
   const [newName, setNewName] = useState("");
   const [newPrice, setNewPrice] = useState("");
 
-  //  LOGIN
+  // LOGIN
   const login = async () => {
     try {
       const res = await fetch(`${BASE_URL}/auth/login`, {
@@ -41,9 +42,10 @@ function App() {
     }
   };
 
-  //  FETCH DATA
+  // FETCH DATA
   useEffect(() => {
     if (user) {
+
       fetch(`${BASE_URL}/api/products`)
         .then(res => res.json())
         .then(data => setProducts(data));
@@ -64,8 +66,11 @@ function App() {
     }
   }, [user]);
 
-  //  FILTER LOGIC
-  const filteredProducts = products.filter(p => {
+  // REMOVE DUPLICATES
+  const uniqueProducts = [...new Map(products.map(p => [p.id, p])).values()];
+
+  // FILTER LOGIC
+  const filteredProducts = uniqueProducts.filter(p => {
     return (
       p.name.toLowerCase().includes(search.toLowerCase()) &&
       (minPrice === "" || p.price >= Number(minPrice)) &&
@@ -73,7 +78,7 @@ function App() {
     );
   });
 
-  //  ADD TO CART
+  // ADD TO CART
   const addToCart = (p) => {
     fetch(`${BASE_URL}/api/cart`, {
       method: "POST",
@@ -91,7 +96,7 @@ function App() {
     });
   };
 
-  //  REMOVE FROM CART
+  // REMOVE FROM CART
   const removeFromCart = (id) => {
     fetch(`${BASE_URL}/api/cart/${id}`, {
       method: "DELETE"
@@ -102,7 +107,7 @@ function App() {
     });
   };
 
-  //  PAYMENT
+  // PAYMENT
   const handlePayment = () => {
     fetch(`${BASE_URL}/api/orders/checkout/${user.id}`, {
       method: "POST"
@@ -117,7 +122,7 @@ function App() {
     });
   };
 
-  //  ADMIN ADD PRODUCT
+  // ADMIN ADD PRODUCT
   const addProduct = () => {
     fetch(`${BASE_URL}/api/products`, {
       method: "POST",
@@ -141,7 +146,7 @@ function App() {
     });
   };
 
-  //  LOGIN UI
+  // LOGIN UI
   if (!user) {
     return (
       <div className="container mt-5">
@@ -172,39 +177,43 @@ function App() {
 
       <h2>Welcome {user.username}</h2>
 
-      {/*  SEARCH + FILTER */}
-      <div className="row mb-3">
-        <div className="col">
-          <input
-            className="form-control"
-            placeholder="Search product"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-        </div>
+      {/* SEARCH + FILTER */}
+      <div className="card p-3 mb-3">
+        <h5>🔍 Search & Filter</h5>
 
-        <div className="col">
-          <input
-            type="number"
-            className="form-control"
-            placeholder="Min Price"
-            value={minPrice}
-            onChange={e => setMinPrice(e.target.value)}
-          />
-        </div>
+        <div className="row">
+          <div className="col-md-4">
+            <input
+              className="form-control"
+              placeholder="Search product..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
 
-        <div className="col">
-          <input
-            type="number"
-            className="form-control"
-            placeholder="Max Price"
-            value={maxPrice}
-            onChange={e => setMaxPrice(e.target.value)}
-          />
+          <div className="col-md-4">
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Min Price"
+              value={minPrice}
+              onChange={e => setMinPrice(e.target.value)}
+            />
+          </div>
+
+          <div className="col-md-4">
+            <input
+              type="number"
+              className="form-control"
+              placeholder="Max Price"
+              value={maxPrice}
+              onChange={e => setMaxPrice(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
-      {/* 🛍 PRODUCTS */}
+      {/* PRODUCTS */}
       <h4>Products</h4>
       {filteredProducts.map(p => (
         <div key={p.id} className="card p-2 mb-2">
@@ -221,7 +230,7 @@ function App() {
         </div>
       ))}
 
-      {/*  USER CART */}
+      {/* USER CART */}
       {user.role === "USER" && (
         <>
           <h4>Cart</h4>
@@ -263,7 +272,7 @@ function App() {
         </>
       )}
 
-      {/* 🛠 ADMIN PANEL */}
+      {/* ADMIN PANEL */}
       {user.role === "ADMIN" && (
         <>
           <h4>Admin Panel</h4>
