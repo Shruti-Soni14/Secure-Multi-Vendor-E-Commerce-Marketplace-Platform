@@ -1,6 +1,11 @@
 package com.example.securemultivendorecommercemarketplaceplatform.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.securemultivendorecommercemarketplaceplatform.model.Order;
+import com.example.securemultivendorecommercemarketplaceplatform.repository.OrderRepository;
+
 import java.util.*;
 
 import static com.example.securemultivendorecommercemarketplaceplatform.controller.CartController.cart;
@@ -10,48 +15,43 @@ import static com.example.securemultivendorecommercemarketplaceplatform.controll
 @CrossOrigin(origins = "*")
 public class OrderController {
 
-    private List<Map<String, Object>> orders = new ArrayList<>();
+    @Autowired
+    private OrderRepository orderRepo;
 
+    //  CHECKOUT (DB SAVE)
     @PostMapping("/checkout/{userId}")
-    public List<Map<String, Object>> checkout(@PathVariable Long userId) {
+    public List<Order> checkout(@PathVariable Long userId) {
 
-        List<Map<String, Object>> userCart = new ArrayList<>();
+        List<Order> savedOrders = new ArrayList<>();
 
         for (Map<String, Object> c : cart) {
-            if (c.get("userId").equals(userId)) {
-                userCart.add(c);
+
+            if (Long.valueOf(c.get("userId").toString()).equals(userId)) {
+
+                Order order = new Order();
+                order.setUserId(userId);
+                order.setProductName(c.get("productName").toString());
+                order.setPrice(Double.valueOf(c.get("price").toString()));
+
+                savedOrders.add(orderRepo.save(order)); //  MAIN FIX
             }
         }
 
-        for (Map<String, Object> c : userCart) {
-            Map<String, Object> order = new HashMap<>();
-            order.put("id", orders.size() + 1);
-            order.put("userId", userId);
-            order.put("productName", c.get("productName"));
-            order.put("price", c.get("price"));
+        // cart clear
+        cart.removeIf(c -> Long.valueOf(c.get("userId").toString()).equals(userId));
 
-            orders.add(order);
-        }
-
-        cart.removeIf(c -> c.get("userId").equals(userId));
-
-        return orders;
+        return savedOrders;
     }
 
+    //  USER ORDERS (DB FETCH)
     @GetMapping("/{userId}")
-    public List<Map<String, Object>> getOrders(@PathVariable Long userId) {
-        List<Map<String, Object>> result = new ArrayList<>();
-
-        for (Map<String, Object> o : orders) {
-            if (o.get("userId").equals(userId)) {
-                result.add(o);
-            }
-        }
-        return result;
+    public List<Order> getOrders(@PathVariable Long userId) {
+        return orderRepo.findByUserId(userId);
     }
 
+    //  ADMIN
     @GetMapping("/all")
-    public List<Map<String, Object>> getAllOrders() {
-        return orders;
+    public List<Order> getAllOrders() {
+        return orderRepo.findAll();
     }
 }
