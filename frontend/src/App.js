@@ -12,298 +12,165 @@ function App() {
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [allOrders, setAllOrders] = useState([]);
 
-  const [showPayment, setShowPayment] = useState(false);
-
-  // SEARCH + FILTER
   const [search, setSearch] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-
-  // ADMIN ADD PRODUCT
-  const [newName, setNewName] = useState("");
-  const [newPrice, setNewPrice] = useState("");
+  const [showCart, setShowCart] = useState(false);
 
   // LOGIN
   const login = async () => {
-    try {
-      const res = await fetch(`${BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      });
-
-      const data = await res.json();
-      setUser(data);
-
-    } catch (err) {
-      alert("Login error");
-    }
+    const res = await fetch(`${BASE_URL}/auth/login`, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({username,password})
+    });
+    const data = await res.json();
+    setUser(data);
   };
 
-  // FETCH DATA
+  // FETCH
   useEffect(() => {
-    if (user) {
-
+    if(user){
       fetch(`${BASE_URL}/api/products`)
-        .then(res => res.json())
-        .then(data => setProducts(data));
+        .then(r=>r.json()).then(setProducts);
 
       fetch(`${BASE_URL}/api/cart/${user.id}`)
-        .then(res => res.json())
-        .then(data => setCart(data));
+        .then(r=>r.json()).then(setCart);
 
       fetch(`${BASE_URL}/api/orders/${user.id}`)
-        .then(res => res.json())
-        .then(data => setOrders(data));
-
-      if (user.role === "ADMIN") {
-        fetch(`${BASE_URL}/api/orders/all`)
-          .then(res => res.json())
-          .then(data => setAllOrders(data));
-      }
+        .then(r=>r.json()).then(setOrders);
     }
-  }, [user]);
+  },[user]);
 
-  // REMOVE DUPLICATES
-  const uniqueProducts = [...new Map(products.map(p => [p.id, p])).values()];
+  // FILTER
+  const filteredProducts = products.filter(p =>
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
 
-  // FILTER LOGIC
-  const filteredProducts = uniqueProducts.filter(p => {
-    return (
-      p.name.toLowerCase().includes(search.toLowerCase()) &&
-      (minPrice === "" || p.price >= Number(minPrice)) &&
-      (maxPrice === "" || p.price <= Number(maxPrice))
-    );
-  });
-
-  // ADD TO CART
+  // CART
   const addToCart = (p) => {
-    fetch(`${BASE_URL}/api/cart`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch(`${BASE_URL}/api/cart`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
       body: JSON.stringify({
-        userId: user.id,
-        productId: p.id,
-        productName: p.name,
-        price: p.price
+        userId:user.id,
+        productId:p.id,
+        productName:p.name,
+        price:p.price
       })
-    }).then(() => {
+    }).then(()=>{
       fetch(`${BASE_URL}/api/cart/${user.id}`)
-        .then(res => res.json())
-        .then(data => setCart(data));
+        .then(r=>r.json()).then(setCart);
     });
   };
 
-  // REMOVE FROM CART
   const removeFromCart = (id) => {
-    fetch(`${BASE_URL}/api/cart/${id}`, {
-      method: "DELETE"
-    }).then(() => {
-      fetch(`${BASE_URL}/api/cart/${user.id}`)
-        .then(res => res.json())
-        .then(data => setCart(data));
-    });
+    fetch(`${BASE_URL}/api/cart/${id}`,{method:"DELETE"})
+      .then(()=>{
+        fetch(`${BASE_URL}/api/cart/${user.id}`)
+          .then(r=>r.json()).then(setCart);
+      });
   };
 
   // PAYMENT
-  const handlePayment = () => {
-    fetch(`${BASE_URL}/api/orders/checkout/${user.id}`, {
-      method: "POST"
-    }).then(() => {
-      alert("Payment Successful ");
-      setCart([]);
-      setShowPayment(false);
-
-      fetch(`${BASE_URL}/api/orders/${user.id}`)
-        .then(res => res.json())
-        .then(data => setOrders(data));
-    });
-  };
-
-  // ADMIN ADD PRODUCT
-  const addProduct = () => {
-    fetch(`${BASE_URL}/api/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: newName,
-        price: Number(newPrice)
-      })
-    })
-    .then(res => res.json())
-    .then(() => {
-      alert("Product Added ");
-      setNewName("");
-      setNewPrice("");
-
-      fetch(`${BASE_URL}/api/products`)
-        .then(res => res.json())
-        .then(data => setProducts(data));
-    });
+  const checkout = () => {
+    fetch(`${BASE_URL}/api/orders/checkout/${user.id}`,{method:"POST"})
+      .then(()=>{
+        alert("Order Placed ");
+        setCart([]);
+      });
   };
 
   // LOGIN UI
-  if (!user) {
-    return (
-      <div className="container mt-5">
-        <h2>Login</h2>
-
-        <input
-          className="form-control mb-2"
-          placeholder="Username"
-          onChange={e => setUsername(e.target.value)}
-        />
-
-        <input
-          className="form-control mb-2"
-          type="password"
+  if(!user){
+    return(
+      <div className="container mt-5 text-center">
+        <h2>🛒 Amazon Clone Login</h2>
+        <input className="form-control my-2" placeholder="Username"
+          onChange={e=>setUsername(e.target.value)} />
+        <input className="form-control my-2" type="password"
           placeholder="Password"
-          onChange={e => setPassword(e.target.value)}
-        />
-
-        <button className="btn btn-primary" onClick={login}>
-          Login
-        </button>
+          onChange={e=>setPassword(e.target.value)} />
+        <button className="btn btn-dark" onClick={login}>Login</button>
       </div>
     );
   }
 
-  return (
-    <div className="container mt-4">
+  return(
+    <div>
 
-      <h2>Welcome {user.username}</h2>
+      {/* NAVBAR */}
+      <nav className="navbar navbar-dark bg-dark px-3">
+        <span className="navbar-brand">🛒 MyStore</span>
 
-      {/* SEARCH + FILTER */}
-      <div className="card p-3 mb-3">
-        <h5>🔍 Search & Filter</h5>
+        <input
+          className="form-control w-50"
+          placeholder="Search Amazon..."
+          value={search}
+          onChange={(e)=>setSearch(e.target.value)}
+        />
 
+        <button className="btn btn-warning"
+          onClick={()=>setShowCart(!showCart)}>
+          🛒 Cart ({cart.length})
+        </button>
+      </nav>
+
+      <div className="container mt-4">
+
+        {/* PRODUCTS GRID */}
         <div className="row">
-          <div className="col-md-4">
-            <input
-              className="form-control"
-              placeholder="Search product..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-            />
-          </div>
+          {filteredProducts.map(p=>(
+            <div className="col-md-3" key={p.id}>
+              <div className="card shadow mb-4">
+                <div className="card-body text-center">
+                  <h5>{p.name}</h5>
+                  <p>₹{p.price}</p>
 
-          <div className="col-md-4">
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Min Price"
-              value={minPrice}
-              onChange={e => setMinPrice(e.target.value)}
-            />
-          </div>
-
-          <div className="col-md-4">
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Max Price"
-              value={maxPrice}
-              onChange={e => setMaxPrice(e.target.value)}
-            />
-          </div>
+                  {user.role==="USER" && (
+                    <button className="btn btn-primary"
+                      onClick={()=>addToCart(p)}>
+                      Add to Cart
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
 
-      {/* PRODUCTS */}
-      <h4>Products</h4>
-      {filteredProducts.map(p => (
-        <div key={p.id} className="card p-2 mb-2">
-          {p.name} - ₹{p.price}
+        {/* CART PANEL */}
+        {showCart && (
+          <div className="card p-3">
+            <h4>🛒 Your Cart</h4>
 
-          {user.role === "USER" && (
-            <button
-              className="btn btn-success mt-2"
-              onClick={() => addToCart(p)}
-            >
-              Add to Cart
-            </button>
-          )}
-        </div>
-      ))}
+            {cart.map(c=>(
+              <div key={c.id} className="d-flex justify-content-between">
+                <span>{c.productName} ₹{c.price}</span>
+                <button className="btn btn-danger btn-sm"
+                  onClick={()=>removeFromCart(c.id)}>
+                  X
+                </button>
+              </div>
+            ))}
 
-      {/* USER CART */}
-      {user.role === "USER" && (
-        <>
-          <h4>Cart</h4>
+            <hr/>
+            <h5>Total: ₹{cart.reduce((s,i)=>s+i.price,0)}</h5>
 
-          {cart.map(c => (
-            <div key={c.id} className="card p-2 mb-2">
-              {c.productName} - ₹{c.price}
-
-              <button
-                className="btn btn-danger mt-2"
-                onClick={() => removeFromCart(c.id)}
-              >
-                Remove
+            {cart.length>0 && (
+              <button className="btn btn-success" onClick={checkout}>
+                Checkout
               </button>
-            </div>
-          ))}
+            )}
+          </div>
+        )}
 
-          <h5>Total: ₹{cart.reduce((sum, i) => sum + i.price, 0)}</h5>
+        {/* ORDERS */}
+        <h4 className="mt-4"> Orders</h4>
+        {orders.map(o=>(
+          <div key={o.id}>{o.productName} - ₹{o.price}</div>
+        ))}
 
-          {cart.length > 0 && (
-            <button
-              className="btn btn-warning"
-              onClick={() => setShowPayment(true)}
-            >
-              Payment
-            </button>
-          )}
-
-          {showPayment && (
-            <button className="btn btn-success mt-2" onClick={handlePayment}>
-              Pay Now
-            </button>
-          )}
-
-          <h4>Orders</h4>
-          {orders.map(o => (
-            <div key={o.id}>{o.productName} - ₹{o.price}</div>
-          ))}
-        </>
-      )}
-
-      {/* ADMIN PANEL */}
-      {user.role === "ADMIN" && (
-        <>
-          <h4>Admin Panel</h4>
-
-          <input
-            className="form-control mb-2"
-            placeholder="Product Name"
-            value={newName}
-            onChange={e => setNewName(e.target.value)}
-          />
-
-          <input
-            className="form-control mb-2"
-            type="number"
-            placeholder="Price"
-            value={newPrice}
-            onChange={e => setNewPrice(e.target.value)}
-          />
-
-          <button className="btn btn-primary" onClick={addProduct}>
-            Add Product
-          </button>
-
-          <h4 className="mt-3">All Orders</h4>
-          {allOrders.map(o => (
-            <div key={o.id}>
-              User: {o.userId} | {o.productName} - ₹{o.price}
-            </div>
-          ))}
-        </>
-      )}
+      </div>
     </div>
   );
 }
