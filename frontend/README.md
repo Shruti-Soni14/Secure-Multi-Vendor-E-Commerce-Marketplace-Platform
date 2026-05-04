@@ -34,5 +34,6 @@ This is the frontend of the Secure Multi-Vendor E-Commerce Marketplace built usi
 
 ```bash
 
-
+npm install
+npm start
 
