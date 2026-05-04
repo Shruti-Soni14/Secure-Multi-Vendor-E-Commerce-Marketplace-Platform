@@ -100,29 +100,36 @@ http://localhost:8080
 
 ---
 
-##  Demo
 
-* Frontend: http://localhost:3000
-* Backend: http://localhost:8080
+ ##  Live Demo
+
+Frontend: https://secure-multi-vendor-e-commerce-mark.vercel.app  
+Backend: https://ecommerce-backend-g1wa.onrender.com
 
 ---
 
 ##  Author
 
-**Shruti Soni**
+Shruti Soni  
+B.Tech Student  
+Full Stack Developer  
+
+GitHub: https://github.com/Shruti-Soni14
 
 ---
 
 ##  Future Improvements
 
-* Payment Integration
-* Admin Dashboard
-* Product Reviews & Ratings
-* Deployment (AWS / Netlify / Render)
+-  Payment Integration (Razorpay / Stripe)
+-  Product Reviews & Ratings
+-  Advanced Admin Dashboard
+-  Order Tracking System
 
 ---
 
 ##  Note
 
-This project is built for learning and demonstration purposes.
+This project demonstrates a real-world full-stack e-commerce application with modern technologies including React, Spring Boot, and PostgreSQL.
+
+It is designed with scalability, modular architecture, and secure API handling.
 
