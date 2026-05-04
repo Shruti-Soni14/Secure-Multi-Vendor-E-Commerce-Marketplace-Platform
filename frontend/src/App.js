@@ -84,7 +84,7 @@ function App() {
   if(!user){
     return(
       <div className="container mt-5 text-center">
-        <h2>🛒 Amazon Clone Login</h2>
+        <h2> Multi Vendor E-Commerce Login </h2>
         <input className="form-control my-2" placeholder="Username"
           onChange={e=>setUsername(e.target.value)} />
         <input className="form-control my-2" type="password"
