@@ -104,7 +104,7 @@ function App() {
 
         <input
           className="form-control w-50"
-          placeholder="Search Amazon..."
+          placeholder="Search E-Commerce..."
           value={search}
           onChange={(e)=>setSearch(e.target.value)}
         />
