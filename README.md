@@ -1,6 +1,6 @@
 #  Secure Multi-Vendor E-Commerce Marketplace Platform
 
-##  Project Overview
+##  🚀 Project Overview
 
 This is a full-stack **Multi-Vendor E-Commerce Marketplace** where multiple sellers can list products and users can browse, add to cart, and place orders.
 
@@ -8,25 +8,25 @@ The project is built using modern technologies with secure authentication and sc
 
 ---
 
-##  Tech Stack
+##  🛠 Tech Stack
 
 ###  Frontend
 
-* React.js
-* HTML, CSS, JavaScript
+* - React.js
+* - HTML, CSS, JavaScript
 
 ###  Backend
 
-* Spring Boot
-* REST APIs
+* - Spring Boot
+* - REST APIs
 
 ###  Database
 
-* PostgreSQL
+* - PostgreSQL
 
 ---
 
-##  Features
+##  ✨ Features
 
 * 🔐 User Authentication (Login & Register)
 * 🛍️ Product Management (Add / View Products)
@@ -37,7 +37,7 @@ The project is built using modern technologies with secure authentication and sc
 
 ---
 
-##  Project Structure
+##  📁 Project Structure
 
 ```
 Secure-Multi-Vendor-E-Commerce-Marketplace-Platform/
@@ -101,10 +101,10 @@ http://localhost:8080
 ---
 
 
- ##  Live Demo
+ ## 🌐 Live Demo
 
-Frontend: https://secure-multi-vendor-e-commerce-mark.vercel.app  
-Backend: https://ecommerce-backend-g1wa.onrender.com
+🔗 Frontend: https://secure-multi-vendor-e-commerce-mark.vercel.app  
+🔗 Backend: https://ecommerce-backend-g1wa.onrender.com
 
 ---
 
@@ -133,3 +133,13 @@ This project demonstrates a real-world full-stack e-commerce application with mo
 
 It is designed with scalability, modular architecture, and secure API handling.
 
+
+---
+
+## ⭐ If you like this project
+
+Give it a ⭐ on GitHub and support the work!
+
+---
+
+© 2026 Shruti Soni | All Rights Reserved
