@@ -108,8 +108,6 @@ http://localhost:8080
 
 ---
 
-## Project Demo Video:
-https://www.loom.com/share/1ebbdafe9549421092060f69b52a5939
 
 ##  Author
 
