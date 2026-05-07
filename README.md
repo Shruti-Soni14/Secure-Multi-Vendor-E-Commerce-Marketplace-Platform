@@ -107,7 +107,8 @@ http://localhost:8080
 🔗 Backend: https://ecommerce-backend-g1wa.onrender.com
 
 ---
-
+## Project Demo Video
+https://www.loom.com/share/1fc6c6c1654b4fdaa5c48045385c75a7
 
 ##  Author
 
